@@ -1,0 +1,40 @@
+.expense-test {
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align to the top of the page */
+    background-color: #f3f4f6;
+}
+
+/* Spinner Style */
+#spinner {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: #3498db;
+    animation: spin 1s ease infinite;
+
+    display: block; /* Ensure it is displayed */
+    visibility: visible; /* Make it visible */
+    opacity: 1; /* Full opacity */
+}
+
+/* Show spinner when loading */
+.htmx-request #spinner {
+    visibility: visible;
+}
+
+/* Spinner animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+

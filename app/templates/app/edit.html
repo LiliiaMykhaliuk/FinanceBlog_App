@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title%} Finance Blog | Your Expense Tracker {{profile.user.first_name}}{% endblock %}
+{% load static %}
+{% block content %}
+
+
+
+<!-- Include Tailwind CSS specifically for this content block -->
+<link rel="stylesheet" href="{% static 'app/output.css' %}">
+
+
+<form method="POST" class="shadow-lg m-10">
+    {% csrf_token %}
+
+    <div class="px-10 py-10 flex">
+        <div class="mx-10">
+            <div class="mb-5">
+                <label class="font-semibold">Name</label>
+            </div>
+            <div class="border p-1">
+                {{expense_form.name}}
+            </div>
+        </div>
+
+        <div class="mx-10">
+            <div class="mb-5">
+                <label class="font-semibold">Category</label>
+            </div>
+            <div class="border p-1">
+                {{expense_form.category}}
+            </div>
+        </div>
+
+        <div class="mx-10">
+            <div class="mb-5">
+                <label class="font-semibold">Expense amount</label>
+            </div>
+            <div class="border p-1">
+                {{expense_form.amount}}
+            </div>
+        </div>
+
+        <div class="mx-10 mt-10">
+            <button class="bg-green-500 px-5 py-2 text-white font-bold" type="submit">Save Expense</button>
+        </div>
+    </div>
+
+
+   
+</form>
+
+{% endblock content %}

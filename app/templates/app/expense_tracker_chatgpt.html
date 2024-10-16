@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title%} Finance Blog | Your Expense Tracker {{profile.user.first_name}}{% endblock %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'app/output.css' %}">
+
+
+<div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-6xl mt-8 mx-auto">
+    <form class="bg-white p-8 rounded-lg shadow-lg w-full max-w-6xl">
+        <h2 class="text-2xl font-semibold text-center mb-6">Add Expense</h2>
+
+        <!-- Fields in one row -->
+        <div class="flex items-center justify-between space-x-4">
+            <!-- Name of Expense -->
+            <div class="flex-1">
+                <input type="text" id="expense-name" name="expense-name" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Name of Expense">
+            </div>
+
+            <!-- Amount -->
+            <div class="flex-1">
+                <input type="number" id="amount" name="amount" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Amount">
+            </div>
+
+            <!-- Currency -->
+            <div class="flex-1">
+                <select id="currency" name="currency" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="usd">USD</option>
+                    <option value="eur">EUR</option>
+                    <option value="gbp">GBP</option>
+                </select>
+            </div>
+
+            <!-- Category -->
+            <div class="flex-1">
+                <select id="category" name="category" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option value="food">Food</option>
+                    <option value="transport">Transport</option>
+                    <option value="entertainment">Entertainment</option>
+                    <option value="bills">Bills</option>
+                </select>
+            </div>
+
+            <!-- Submit Button (aligned with the fields) -->
+            <div class="flex-none">
+                <button type="submit" class="bg-gradient-to-r from-orange-400 via-pink-500 to-red-500 text-white w-full p-3 rounded-lg font-semibold flex justify-center items-center space-x-2 hover:bg-gradient-to-l focus:outline-none focus:ring-2 focus:ring-pink-300">
+                    <span>+</span>
+                    <span>Add Expense</span>
+                </button>
+            </div>
+        </div>
+    </form>
+
+    
+</div>
+
+<!-- Expenses Table -->
+<div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-6xl mt-8 mx-auto">
+    <h2 class="text-2xl font-semibold text-center mb-6">Expense List</h2>
+    <table class="w-full table-auto border-collapse">
+        <thead class="bg-gray-100">
+            <tr>
+                <th class="p-3 border border-gray-300">Name of Expense</th>
+                <th class="p-3 border border-gray-300">Amount</th>
+                <th class="p-3 border border-gray-300">Currency</th>
+                <th class="p-3 border border-gray-300">Category</th>
+                <th class="p-3 border border-gray-300">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Example row - replace this with dynamic data -->
+            <tr>
+                <td class="p-3 border border-gray-300">Lunch</td>
+                <td class="p-3 border border-gray-300">$10</td>
+                <td class="p-3 border border-gray-300">USD</td>
+                <td class="p-3 border border-gray-300">Food</td>
+                <td class="p-3 border border-gray-300">
+                    <button class="bg-blue-500 text-white px-2 py-1 rounded-lg text-xs hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 mr-2">Edit</button>
+                    <button class="bg-red-500 text-white px-2 py-1 rounded-lg text-xs hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400">Delete</button>
+                </td>
+            </tr>
+            <!-- Add more rows as necessary -->
+        </tbody>
+    </table>
+</div>
+
+{% endblock content %}

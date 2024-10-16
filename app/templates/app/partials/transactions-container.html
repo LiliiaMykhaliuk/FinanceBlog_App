@@ -1,0 +1,113 @@
+{% load widget_tweaks %}
+{% load humanize %}
+
+<!-- Define Grid container div -->
+<div class="grid grid-cols-4 gap-6"
+    id="transaction-container">
+
+    <!-- New text with links and pipe between them -->
+    <div class="col-span-4 mb-6 flex items-center justify-start space-x-4">
+        <!-- Single phrase with links in it -->
+        <a hx-get="{% url "create-transaction" %}"
+           hx-push-url="true"
+           hx-target="#transaction-block"
+           class="text-green-500 hover:underline">
+            Add new transactions
+        </a>
+    </div>
+
+    <!-- 3/4 cols for the table of transactions, now taking more width -->
+    <div class="col-span-3">
+        <h2 class="mt-4 mb-4 prose prose-2xl text-3xl font-bold text-center mb-8">Totals</h2>
+        <div class="overflow-x-auto">
+            <table class="w-full table-auto border-collapse text-lg">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="p-4 text-left border-b border-gray-300">Total Income</th>
+                        <th class="p-4 text-left border-b border-gray-300">Total Expenses</th>
+                        <th class="p-4 text-left border-b border-gray-300">Net Income</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Example row - replace this with dynamic data -->
+                    <tr>
+                        <td class="p-4 border-b border-gray-300">${{ total_income|floatformat:2|intcomma }}</td>
+                        <td class="p-4 border-b border-gray-300">${{ total_expenses|floatformat:2|intcomma }}</td>
+                        <td class="p-4 border-b border-gray-300">${{ net_income|floatformat:2|intcomma }}</td>
+                    </tr>
+                    <!-- Add more rows as necessary -->
+                </tbody>
+            </table>
+        </div>
+
+
+        {% if filter.qs %}
+            <!-- Expenses Table -->
+            <h2 class="mt-4 mb-4 prose prose-2xl text-3xl font-bold text-center mb-8">Expense List</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full table-auto border-collapse text-lg">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="p-4 text-left border-b border-gray-300">Date</th>
+                            <th class="p-4 text-left border-b border-gray-300">Category</th>
+                            <th class="p-4 text-left border-b border-gray-300">Type</th>
+                            <th class="p-4 text-left border-b border-gray-300">Amount</th>
+                            <th class="p-4 text-left border-b border-gray-300">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Example row - replace this with dynamic data -->
+                        {% for transaction in filter.qs %}
+                        <tr>
+                            <td class="p-4 border-b border-gray-300">{{transaction.date}}</td>
+                            <td class="p-4 border-b border-gray-300">{{transaction.category}}</td>
+                            <td class="p-4 border-b border-gray-300">{{transaction.type}}</td>
+                            <td class="p-4 border-b border-gray-300">{{transaction.amount_in_usd}}</td>
+                            <td class="p-4 border-b border-gray-300">
+                                <button class="bg-blue-500 text-white px-4 py-2 rounded-lg text-base hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 mr-2">Edit</button>
+                                <button class="bg-red-500 text-white px-4 py-2 rounded-lg text-base hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400">Delete</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <!-- Add more rows as necessary -->
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+        <p class="text-center text-3xl text-gray-500 mt-8 mx-auto">No expenses added yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- 1/4 cols for the filter form, sticky to the right side -->
+    <div class="col-span-1 sticky top-0 ml-6">
+        <form hx-get="{% url 'transactions' %}"
+            hx-target="#transaction-container"
+            hx-swap="outerHTML" class="bg-white p-8 rounded-lg shadow-md">
+            <div class="mb-4 form-control">
+                {{filter.form.transaction_type|add_label_class:"label text-xl text-black"}}
+                {% render_field filter.form.transaction_type class+="border-green-500 bg-gray-200 text-lg p-3" %}
+            </div>
+
+            <div class="mb-4 form-control">
+                {{filter.form.start_date|add_label_class:"label text-xl text-black"}}
+                {% render_field filter.form.start_date class+="border-green-500 bg-gray-200 text-lg p-3" %}
+            </div>
+
+            <div class="mb-4 form-control">
+                {{filter.form.end_date|add_label_class:"label text-xl text-black"}}
+                {% render_field filter.form.end_date class+="border-green-500 bg-gray-200 text-lg p-3" %}
+            </div>
+
+            <div class="mb-4 form-control">
+                {% render_field filter.form.category class+="text-green-500 border-gray-300 rounded focus:ring-green-500" %}
+            </div>
+
+            <div class="flex-none">
+                <button type="submit" class="bg-green-400 text-white w-full p-4 rounded-lg font-bold text-lg hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-300">
+                    Filter
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
