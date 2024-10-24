@@ -18,8 +18,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 env = environ.Env()
-# Read the .env file if it exists
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+# Only load the .env file in development (local) environment
+if os.getenv('DJANGO_ENV') != 'production':
+    environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 API_URL = env('API_URL')
 API_KEY = env('API_KEY')
@@ -29,12 +31,14 @@ API_ENDPOINT = env('API_ENDPOINT')
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-je_q03-qsiu4mgac+cbis3e0mtm3#akfygb7m_ek6m+$)ur4@i"
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'financeblog.us-east-1.elasticbeanstalk.com'
+]
 
 
 # Application definition

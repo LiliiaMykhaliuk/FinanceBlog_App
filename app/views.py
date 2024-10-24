@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
-from app.models import Comments, Post, Tag, Profile, WebSiteMeta, Expense, Transaction
+from app.models import Comments, Post, Tag, Profile, WebSiteMeta, Expense, Transaction, Category
 from app.forms import CommentForm, SubscribeForm, NewUserForm, ExpenseForm, TransactionForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -437,3 +437,50 @@ def get_transactions(request):
         'app/partials/expense_tracker_container.html#transaction_list',
         context
     )
+
+
+def view_statistic(request):
+    '''Function to view statistics'''
+
+    # Get the date 30 days ago from today
+    last_30_days = datetime.date.today() - datetime.timedelta(days=30)
+
+    # Get the total expenses the last 30 days
+    expense_data_last_30_days = Transaction.objects.filter(date__gt=last_30_days, type='expense', user=request.user)
+    last_month_expenses = expense_data_last_30_days.aggregate(Sum('amount_in_usd'))
+
+    # Get the total income the last 30 days
+    income_data_last_30_days = Transaction.objects.filter(date__gt=last_30_days, type='income', user=request.user)
+    last_month_income = income_data_last_30_days.aggregate(Sum('amount_in_usd'))
+
+    # Get total sum by category for the last 30 days
+    category_names = []
+    category_sums = []
+
+    expenses_by_category_last_30_days = Transaction.objects.filter(date__gt=last_30_days, type='expense', user=request.user).values('category').order_by('category').annotate(sum=Sum('amount_in_usd'))
+    
+    for expense in expenses_by_category_last_30_days:
+        category_name = Category.objects.get(id=expense['category']).name
+        category_names.append(category_name)
+        category_sums.append(expense['sum'])
+    
+    # Get total sum by day for the last 30 days
+    last_7_days_dates = []
+    last_7_days_sums = []
+    expenses_by_day_last_30_days = Transaction.objects.filter(date__gt=last_30_days, type='expense', user=request.user).values('date').order_by('date').annotate(sum=Sum('amount_in_usd'))
+
+    for expense in expenses_by_day_last_30_days:
+        last_7_days_dates.append(expense['date'])
+        last_7_days_sums.append(expense['sum'])
+
+    context = {
+        'category_names': category_names,
+        'category_sums': category_sums,
+        'last_7_days_dates': last_7_days_dates,
+        'last_7_days_sums': last_7_days_sums,
+        'last_month_expenses' : last_month_expenses,
+        'last_month_income' : last_month_income,
+    }
+    
+    #context = {}
+    return render(request, 'app/statistic.html', context)

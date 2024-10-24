@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block title %}Finance Blog | Transactions list{% endblock title %}
+{% load static %}
+{% load humanize %}
+{% load widget_tweaks %}
+{% block content %}
+
+
+<link rel="stylesheet" href="{% static 'app/output.css' %}">
+<link rel="stylesheet" href="{% static 'app/test.css' %}">
+    <!-- HTMX -->
+<script src="{% static 'app/js/htmx.min.js' %}"></script>
+
+<div class="flex justify-center items-start">
+    <div class="w-3/4 mt-5 p-6 bg-white rounded-lg text-center">
+        <!-- Flex container for blocks -->
+        <div class="flex justify-center space-x-4">
+            <!-- Block 1 -->
+            <div class="w-1/4 h-40 p-4 bg-white shadow-lg rounded-lg hover:bg-gray-200 transition-colors">
+                <h1>Expenses - last months</h1>
+                {{last_month_expenses.amount_in_usd__sum}}
+            </div>
+            <!-- Block 2 -->
+            <div class="w-1/4 h-40 p-4 bg-white shadow-lg rounded-lg hover:bg-gray-200 transition-colors">
+                <h1>Income - last month</h1>
+                {{last_month_income.amount_in_usd__sum}}
+            </div>
+            <!-- Block 3 -->
+            <div class="w-1/4 h-40 p-4 bg-white shadow-lg rounded-lg hover:bg-gray-200 transition-colors">
+                Block 3
+            </div>
+            <!-- Block 4 -->
+            <div class="w-1/4 h-40 p-4 bg-white shadow-lg rounded-lg hover:bg-gray-200 transition-colors">
+                Block 4
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="flex">
+    <div class="w-1/2 shadow-lg m-10">
+        <h1 class="m-10">Expenses by category</h1>
+        <canvas id="myChart1" class="m-10"</canvas>
+    </div>
+    <div class="w-1/2 shadow-lg m-10">
+        <h1 class="m-10">Daily expenses sum</h1>
+        <canvas id="myChart2" class="m-10"</canvas>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
+
+<script>
+    // Chart for first canvas
+    var ctx1 = document.getElementById('myChart1').getContext('2d');
+    var myChart1 = new Chart(ctx1, {
+        type: 'pie',
+        data: {
+            labels: [{% for category in  category_names %} '{{category}}', {% endfor %}],
+            datasets: [{
+                data: [{% for category_sum in  category_sums %} '{{category_sum}}', {% endfor %}], // Example data for the first chart
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Chart for second canvas
+    var ctx2 = document.getElementById('myChart2').getContext('2d');
+    var myChart2 = new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: [{% for date in  last_7_days_dates %} '{{date}}', {% endfor %}],
+            datasets: [{
+                data: [{% for sum in  last_7_days_sums %} '{{sum}}', {% endfor %}], // Example data for the second chart
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+
+
+
+
+
+{% endblock content %}

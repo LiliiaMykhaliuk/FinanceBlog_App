@@ -4,7 +4,17 @@
 # Ignore Python bytecode and cache files
 __pycache__/
 *.py[cod]
+.pytest_cache/
 
 # Ignore other cache and temp files
 *.log
 *.sqlite3
+
+
+
+node_modules/
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
