@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 
-from app.models import Comments, Post, Tag, Profile, WebSiteMeta, Expense, Transaction, Category
-from app.forms import CommentForm, SubscribeForm, NewUserForm, ExpenseForm, TransactionForm
+from app.models import Comments, Post, Tag, Profile, WebSiteMeta, Transaction, Category
+from app.forms import CommentForm, SubscribeForm, NewUserForm, TransactionForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -210,72 +210,7 @@ def all_posts(request):
     return render(request, 'app/all_posts.html', context)
 
 
-# def expense_tracker(request):
 
-#     api_data = get_exchange_rates('SEK')
-#     context = {'api_data': api_data}
-#     return render(request, 'app/expense_tracker.html', context)
-# def expense_tracker(request):
-#     '''Function track all expenses and incomes.'''
-
-#     if request.method == 'POST':
-#         expense = ExpenseForm(request.POST)
-#         if expense.is_valid():
-#             expense.save()
-
-    
-#     expenses = Expense.objects.all()
-#     total_expenses = expenses.aggregate(Sum('amount'))  
-
-#     # Logic to calculate 365 days expenses
-#     last_year = datetime.date.today() - datetime.timedelta(days=365)      
-#     data_last_year = Expense.objects.filter(date__gt=last_year)
-#     yearly_sum = data_last_year.aggregate(Sum('amount'))
-
-#     # Logic to calculate 30 days expenses
-#     last_30_days = datetime.date.today() - datetime.timedelta(days=30)      
-#     data_last_30_days = Expense.objects.filter(date__gt=last_30_days)
-#     monthly_sum = data_last_30_days.aggregate(Sum('amount'))
-
-#     # Logic to calculate 7 days expenses
-#     last_7_days = datetime.date.today() - datetime.timedelta(days=7)      
-#     data_last_7_days = Expense.objects.filter(date__gt=last_7_days)
-#     weekly_sum = data_last_7_days.aggregate(Sum('amount'))
-
-#     daily_sums = Expense.objects.filter().values('date').order_by('date').annotate(sum=Sum('amount'))
-#     categorical_sums = Expense.objects.filter().values('category').order_by('category').annotate(sum=Sum('amount'))
-
-#     expense_form = ExpenseForm()
-#     context = {'expense_form': expense_form, 'expenses': expenses,
-#                'total_expenses':total_expenses,
-#                'yearly_sum':yearly_sum,
-#                'monthly_sum':monthly_sum,
-#                'weekly_sum':weekly_sum,
-#                'daily_sums':daily_sums,
-#                'categorical_sums':categorical_sums
-#      }
-#     return render(request, 'app/expense_tracker.html', context) 
-
-
-def edit(request, id):
-    expense = Expense.objects.get(id=id)
-    expense_form = ExpenseForm(instance = expense)
-
-    if request.method == 'POST':
-        expense = Expense.objects.get(id=id)
-        form = ExpenseForm(request.POST, instance = expense)
-        if form.is_valid():
-            form.save()
-            return redirect('expense_tracker')
-        
-    context = {'expense_form': expense_form}
-    return render(request, 'app/edit.html', context) 
-
-def delete(request, id):
-    if request.method == 'POST' and ('delete' in request.POST):
-        expense = Expense.objects.get(id=id)
-        expense.delete()
-    return redirect('expense_tracker')
 
 @login_required
 def transactions_list(request):
