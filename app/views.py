@@ -11,6 +11,7 @@ interaction such as subscribing and commenting.
 
 
 import datetime
+import time
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect
@@ -288,34 +289,69 @@ def search_posts(request):
 
 
 def about(request):
+    """
+    View to render the 'About' page.
+
+    Fetches the website metadata, if it exists, and displays it on the 'About' page.
+    
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered about page with website metadata context.
+    """
+
     website_info = None
 
     # Fetching meta data if exists
     if WebSiteMeta.objects.all().exists():
         website_info = WebSiteMeta.objects.all()[0]
 
+    # Context data for rendering the search results page
     context = {'website_info':website_info}
     return render(request, 'app/about.html', context)
 
 
 def register_user(request):
+    """
+    View to handle user registration.
+
+    Renders a form for new users to register, and automatically logs in the user upon successful registration.
+
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered registration page with the registration form or 
+                      a redirect to the homepage after successful registration.
+    """
+
     form = NewUserForm()
     if request.method == "POST":
         form = NewUserForm(request.POST)
         if form.is_valid():
 
-            # Automatically login user after registration
+            # Save user and log them in
             user = form.save()
             login(request, user)
             return redirect("/")
 
+    # Context data for rendering the search results page
     context = {'form': form}
     return render(request, 'registration/registration.html', context)
 
 
-
 def bookmark_post(request, slug):
-    '''Toggles bookmarking: Adds or removes a post from the user's bookmarks.'''
+    """
+    View to toggle a bookmark on a post for the current user.
+
+    Args:
+        request: The HTTP request object.
+        slug (str): The slug of the post to be bookmarked.
+
+    Returns:
+        HttpResponseRedirect: Redirects back to the post page.
+    """
 
     post = get_object_or_404(Post, id=request.POST.get('post_id'))
     if post.bookmarks.filter(id=request.user.id).exists():
@@ -323,48 +359,93 @@ def bookmark_post(request, slug):
     else:
         post.bookmarks.add(request.user) # Add bookmark if it doesn't exist
 
+    # Context data for rendering the search results page
     return HttpResponseRedirect(reverse('post_page', args=[str(slug)]))
 
 
 def like_post(request, slug):
-    '''Toggles like: Adds or removes a like from the post for the current user.'''
+    """
+    View to toggle a like on a post for the current user.
+
+    Args:
+        request: The HTTP request object.
+        slug (str): The slug of the post to be liked.
+
+    Returns:
+        HttpResponseRedirect: Redirects back to the post page.
+    """
 
     post = get_object_or_404(Post, id=request.POST.get('post_id'))
     if post.likes.filter(id=request.user.id).exists():
         post.likes.remove(request.user) # Remove like if it exists
     else:
         post.likes.add(request.user) # Add like if it doesn't exist
-
+    
     return HttpResponseRedirect(reverse('post_page', args=[str(slug)]))
 
 
 def all_bookmarked_posts(request):
-    '''Returns all bookmarked posts for the current user.'''
+    """
+    View to display all posts bookmarked by the current user.
+
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered bookmarked posts page.
+    """
 
     bookmarked_posts = Post.objects.filter(bookmarks=request.user)
+
+    # Context data for rendering the search results page
     context = {'bookmarked_posts': bookmarked_posts}
     return render(request, 'app/all_bookmarked_posts.html', context)
 
 
 def my_posts(request):
-    '''Returns all posts where the current user is the author.'''
+    """
+    View to display all posts authored by the current user.
+
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered user posts page.
+    """
 
     all_user_posts = Post.objects.filter(author=request.user)
+
+    # Context data for rendering the search results page
     context = {'all_user_posts': all_user_posts}
     return render(request, 'app/my_posts.html', context)
 
+
 def all_posts(request):
-    '''Returns all posts.'''
+    """
+    View to display all posts.
+
+    Args:
+        request: The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered all posts page.
+    """
 
     all_posts = Post.objects.all()
+
+    # Context data for rendering the search results page
     context = {'all_posts': all_posts}
+
     return render(request, 'app/all_posts.html', context)
-
-
 
 
 @login_required
 def transactions_list(request):
+    """
+    View to display filtered list of transactions for the current user.
+    Supports HTMX requests for partial page rendering.
+    """
+
     transaction_filter = TransactionFilter(
         request.GET,
         queryset=Transaction.objects.filter(user=request.user).select_related('category')
@@ -372,6 +453,8 @@ def transactions_list(request):
 
     total_income = transaction_filter.qs.get_total_income()
     total_expenses = transaction_filter.qs.get_total_expenses()
+
+    # Context data for rendering the search results page
     context = {
         'filter': transaction_filter,
         'total_income': total_income,
@@ -380,7 +463,6 @@ def transactions_list(request):
     }
 
     if request.htmx:
-        print("It was HTMX")
         return render(request, 'app/partials/transactions-container.html', context)
 
     return render(request, 'app/transactions-list.html', context)
@@ -388,6 +470,10 @@ def transactions_list(request):
 
 @login_required
 def expense_tracker(request):
+    """
+    View to display a paginated and filtered list of transactions with income/expense summary.
+    Supports HTMX requests for partial page rendering.
+    """
 
     all_transactions = Transaction.objects.all().filter(user=request.user).select_related('category')
     total_income = all_transactions.get_total_income()
@@ -398,11 +484,16 @@ def expense_tracker(request):
         request.GET,
         queryset=Transaction.objects.filter(user=request.user).select_related('category')
     )
+
+    # Handle pagination
     paginator = Paginator(transaction_filter.qs, settings.PAGE_SIZE)  # Show 5 transactions per page.
     transaction_page = paginator.page(1) # Show the first page of results.
 
+    # Filtered totals
     total_income_filtered = transaction_filter.qs.get_total_income()
     total_expenses_filtered = transaction_filter.qs.get_total_expenses()
+
+    # Context data for rendering the search results page
     context = {
         'filter': transaction_filter,
         'total_income_filtered': total_income_filtered,
@@ -414,38 +505,51 @@ def expense_tracker(request):
     }
 
     if request.htmx:
-        print("It was HTMX")
         return render(request, 'app/partials/expense_tracker_container.html', context)
 
     return render(request, 'app/expense_tracker.html', context)
 
+
 @login_required
 def create_transaction(request):
+    """
+    Creates a new transaction for the user with a form that dynamically loads currency options.
+    """
 
-    # Initialize the form, passing the currencies as choices
-    # form = TransactionForm()
-    # form.fields['currency'].choices = currencies
-
+    # Fetch available currencies from an API.
     api_data = get_exchange_rates()
     if api_data:
-        currencies = [(code, code) for code in api_data.keys()]
+        currencies = [(code, code) for code in api_data.keys()]  # Dynamically set currency choices
     else:
         currencies = []
 
     if request.method == 'POST':
+
+        # Initialize the form with posted data and dynamic currency choices
         form = TransactionForm(request.POST, currencies=currencies)
+
+        # Check if form data is valid
         if form.is_valid():
+
+            # Create transaction instance without saving to add user and converted amount
             transaction = form.save(commit=False)
-            transaction.user = request.user
+            transaction.user = request.user # Associate transaction with the current user
+
+            # Convert transaction amount to EUR and save it to `amount_in_usd` field
             transaction.amount_in_usd = convert_to_EUR(transaction.amount, transaction.currency)
-            transaction.save()
+            transaction.save()  # Save the transaction to the database
+
+            # Render a success message on successful transaction creation
             context = {'message': "Transaction was added successfully!"}
             return render(request, 'app/partials/transaction-success.html', context)
         else:
+            # Render form with error messages if invalid
             context = {'form': form}
             response = render(request, 'app/partials/create-transaction.html', context)
             return retarget(response, '#transaction-block')
+
     else:
+        # For GET requests, initialize an empty form with dynamic currency choices
         form = TransactionForm(currencies=currencies)
 
     context = {'form': form}
@@ -454,111 +558,177 @@ def create_transaction(request):
 
 @login_required
 def update_transaction(request, pk):
-    '''Function to update a transaction'''
+    """
+    Handles the update of an existing transaction for the current user.
+
+    This view fetches available currencies from an API to populate choices in the transaction form.
+    If the form is valid and either 'amount' or 'currency' has changed, it recalculates the 
+    `amount_in_usd` before saving. If invalid, it re-renders the form with error messages.
+    """
  
+    # Fetch available currencies from an external API
     api_data = get_exchange_rates()
     if api_data:
-        currencies = [(code, code) for code in api_data.keys()]
+        currencies = [(code, code) for code in api_data.keys()] # Default to empty list if API fails
     else:
         print('API IS DOWN')
         currencies = []
 
+    # Retrieve the transaction to be updated, ensuring it belongs to the current user
     transaction = get_object_or_404(Transaction, pk=pk, user=request.user)
 
     if request.method == 'POST':
-        form = TransactionForm(request.POST, currencies=currencies, instance=transaction)
-        if form.is_valid():
-            transaction = form.save(commit=False)
 
-            # Check if the 'amount' or 'currency' field has changed
+        # Initialize the form with POST data, currency choices, and the existing transaction instance
+        form = TransactionForm(request.POST, currencies=currencies, instance=transaction)
+
+        # Check if the form data is valid
+        if form.is_valid():
+            transaction = form.save(commit=False) # Prepare to save but hold off to allow further changes
+
+            # Recalculate `amount_in_usd` if either 'amount' or 'currency' has changed
             if form.has_changed() and ('amount' in form.changed_data or 'currency' in form.changed_data):
                 transaction.amount_in_usd = convert_to_EUR(transaction.amount, transaction.currency)
 
-            transaction.save()
+            transaction.save()  # Save the updated transaction to the database
+
+            # Render a success message if update was successful
             context = {'message': "Transaction was updated successfully!"}
             return render(request, 'app/partials/transaction-success.html', context)
         else:
+            # Render form with errors if form data is invalid
             context = {'form': form}
             response =  render(request, 'app/update-transaction.html', context)
             return retarget(response, '#transaction-block')
     else:
+        # For GET requests, initialize a form with the existing transaction instance and currency choices
         form = TransactionForm(currencies=currencies)
 
 
-
+    # Render the update transaction form with the existing transaction data
     context = {
         'form': TransactionForm(instance=transaction, currencies=currencies),
         'transaction': transaction,
     }
     return render(request, 'app/update-transaction.html', context)
 
+
 @login_required
 @require_http_methods(['DELETE'])
 def delete_transaction(request, pk):
-    '''Function to delete a transaction'''
+    """
+    Handle deletion of a specific transaction for the current user.
 
+    This view deletes a transaction instance if it belongs to the logged-in user.
+    After deletion, it renders a success message displaying the deleted transaction's
+    amount in EUR and date.
+    """
+
+    # Retrieve the transaction by primary key, ensuring it belongs to the current user
     transaction = get_object_or_404(Transaction, pk=pk, user=request.user)
+
+    # Delete the retrieved transaction from the database
     transaction.delete()
+
+    # Context message with confirmation details of the deleted transaction
     context = {'message': f'Transaction of {transaction.amount_in_usd} EUR on {transaction.date} was deleted successfully!'}
+
+    # Render the success message in the specified template
     return render(request, 'app/partials/transaction-success.html', context)
 
 
 @login_required
 def get_transactions(request):
-    import time
+    """
+    Fetch and paginate transactions for the current user, rendering the results.
+
+    This view applies filtering and pagination to the user's transactions based on
+    query parameters. It returns the specified page of filtered transactions, allowing
+    for dynamic reloading and rendering in the expense tracker interface.
+    """
+
     time.sleep(10)  # Simulate a delay of 1 second
-    page = request.GET.get('page', 1)  # Get the page number from the query parameters, default to 1 if not provided
-        # Logic for filtering expenses
+
+    # Get the requested page number from query parameters; default to page 1 if unspecified
+    page = request.GET.get('page', 1)
+    
+    # Apply filtering to transactions based on user and query parameters
     transaction_filter = TransactionFilter(
         request.GET,
         queryset=Transaction.objects.filter(user=request.user).select_related('category')
     )
+
+    # Paginate the filtered queryset with the defined page size
     paginator = Paginator(transaction_filter.qs, settings.PAGE_SIZE)  # Show 5 transactions per page.
 
+    # Context dictionary for rendering the template with paginated transactions
     context = {
         'transactions': paginator.page(page)  # Get the transactions for the specified page
     }
+
+    # Render the filtered and paginated transactions to a specific section in the template
     return render(
         request,
         'app/partials/expense_tracker_container.html#transaction_list',
         context
     )
 
+
 @login_required
 def view_statistic(request):
-    '''Function to view statistics'''
+    """
+    Display a summary of financial statistics for the current user over the past 30 days.
 
-    # Get the date 30 days ago from today
+    This view calculates and aggregates data on income, expenses, spending per category,
+    and daily expenses for the last 30 days. The results are then passed to the context
+    for rendering on the statistics page.
+    """
+
+    # Calculate the date 30 days ago from today
     last_30_days = datetime.date.today() - datetime.timedelta(days=30)
 
-    # Get the total expenses the last 30 days
+    # Query for total expenses over the last 30 days
     expense_data_last_30_days = Transaction.objects.filter(date__gt=last_30_days, type='expense', user=request.user)
     last_month_expenses = expense_data_last_30_days.aggregate(Sum('amount_in_usd'))
 
-    # Get the total income the last 30 days
+    # Query for total income over the last 30 days
     income_data_last_30_days = Transaction.objects.filter(date__gt=last_30_days, type='income', user=request.user)
     last_month_income = income_data_last_30_days.aggregate(Sum('amount_in_usd'))
 
-    # Get total sum by category for the last 30 days
+    # Aggregate expenses by category over the last 30 days
     category_names = []
     category_sums = []
 
-    expenses_by_category_last_30_days = Transaction.objects.filter(date__gt=last_30_days, type='expense', user=request.user).values('category').order_by('category').annotate(sum=Sum('amount_in_usd'))
-    
+    expenses_by_category_last_30_days = (
+        Transaction.objects
+        .filter(date__gt=last_30_days, type='expense', user=request.user)
+        .values('category').order_by('category')
+        .annotate(sum=Sum('amount_in_usd'))
+    )
+
+    # Retrieve category names and corresponding sums
     for expense in expenses_by_category_last_30_days:
         category_name = Category.objects.get(id=expense['category']).name
         category_names.append(category_name)
         category_sums.append(expense['sum'])
     
-    # Get total sum by day for the last 30 days
+    # Aggregate expenses by day over the last 30 days
     last_7_days_dates = []
     last_7_days_sums = []
-    expenses_by_day_last_30_days = Transaction.objects.filter(date__gt=last_30_days, type='expense', user=request.user).values('date').order_by('date').annotate(sum=Sum('amount_in_usd'))
+    expenses_by_day_last_30_days = (
+        Transaction.objects
+        .filter(date__gt=last_30_days, type='expense', user=request.user)
+        .values('date')
+        .order_by('date')
+        .annotate(sum=Sum('amount_in_usd'))
+    )
 
+    # Retrieve dates and corresponding sums for daily expenses over the last 30 days
     for expense in expenses_by_day_last_30_days:
         last_7_days_dates.append(expense['date'])
         last_7_days_sums.append(expense['sum'])
 
+    # Compile data into the context dictionary for template rendering
     context = {
         'category_names': category_names,
         'category_sums': category_sums,
@@ -568,5 +738,5 @@ def view_statistic(request):
         'last_month_income' : last_month_income,
     }
     
-    #context = {}
+    # Render the statistics page with the aggregated data
     return render(request, 'app/statistic.html', context)
