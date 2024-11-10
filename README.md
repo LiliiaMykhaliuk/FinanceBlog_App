@@ -14,7 +14,7 @@ Built with modern technologies like Django, Python, and AWS, the platform provid
 
 
 ### 1. **Personal Finance Blog:** 
-- **Customizable Design:** A comprehensive blogging platform for sharing financial insights, tips, and articles to help users manage their finances effectively.
+- **Financial Guidance & Insights:** A comprehensive blogging platform for sharing financial insights, tips, and articles to help users manage their finances effectively.
 
 ### 2. **Expense Tracking & Management**
 - **Real-Time Transaction Tracking:** Automatically record income and expense transactions, categorize them, and display real-time financial data.
