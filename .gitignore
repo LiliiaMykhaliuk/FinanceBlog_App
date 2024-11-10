@@ -1,6 +1,9 @@
 # Ignore .env file
 .env
 
+# Ignore tailwind generated css file
+app/static/app/output.css
+
 # Ignore Python bytecode and cache files
 __pycache__/
 *.py[cod]
@@ -24,5 +27,4 @@ env/
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 
-# Ignore tailwind generated css file
-app/static/css/output.css
+
