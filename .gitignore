@@ -15,8 +15,14 @@ __pycache__/
 node_modules/
 env/
 
+# AWS files
+
+.ebextentions/
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/
-.ebextentions/
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# Ignore tailwind generated css file
+app/static/css/output.css

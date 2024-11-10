@@ -37,7 +37,8 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env.bool('DEBUG', default=False)
 
 ALLOWED_HOSTS = [
-    'financeblog.us-east-1.elasticbeanstalk.com'
+    'financeblog.us-east-1.elasticbeanstalk.com',
+    '127.0.0.1'
 ]
 
 

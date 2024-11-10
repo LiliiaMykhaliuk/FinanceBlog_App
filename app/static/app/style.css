@@ -14,6 +14,7 @@
 
 :root {
   --red: #ff4b64;
+  --blue: #004085;
   --black: #404040;
   --des: #555555;
   --shadow: #ffffff1a 0px 1px 1px 0px inset, #32325d40 0px 50px 100px -20px,
@@ -78,7 +79,7 @@ header .container {
 
 .logo i {
   font-size: 5rem;
-  color: var(--red);
+  color: var(--blue);
 }
 
 .btn {
@@ -87,7 +88,7 @@ header .container {
   padding: 0 3rem;
   font-size: 1.6rem;
   font-weight: 500;
-  border: 1px solid var(--red);
+  border: 1px solid var(--blue);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -99,13 +100,13 @@ header .container {
 }
 
 .btn-primary {
-  background: var(--red);
+  background: var(--blue);
   color: white;
 }
 
 .btn-scoundary {
   background: transparent;
-  color: var(--red);
+  color: var(--blue);
 }
 
 .rounded {
@@ -130,7 +131,7 @@ header .container {
 }
 
 .link-active {
-  color: var(--red);
+  color: var(--blue);
   font-weight: 500;
 }
 
@@ -258,7 +259,7 @@ header .container {
 }
 
 .cetagory {
-  background: var(--red);
+  background: var(--blue);
   width: fit-content;
   border-radius: 5rem;
   padding: 0.5rem 1rem;
@@ -273,7 +274,7 @@ header .container {
   display: flex;
   align-items: center;
   gap: 1rem;
-  color: var(--red);
+  color: var(--blue);
   margin-top: 2rem;
 }
 
@@ -321,7 +322,7 @@ header .container {
   position: absolute;
   bottom: 1rem;
   left: 1rem;
-  background: var(--red);
+  background: var(--blue);
   color: white;
   border-radius: 5rem;
   padding: 0.5rem 1rem;
@@ -397,7 +398,7 @@ header .container {
 
 .link h2,
 .news-signup h2 {
-  color: var(--red);
+  color: var(--blue);
   font-weight: 600;
   font-size: 1.7rem;
 }
@@ -446,11 +447,11 @@ footer .container {
 }
 
 .social a:hover {
-  border-color: var(--red);
+  border-color: var(--blue);
 }
 
 .social a:hover i {
-  color: var(--red);
+  color: var(--blue);
 }
 
 /* blog page */
@@ -593,7 +594,7 @@ footer .container {
 }
 
 .track i {
-  color: var(--red);
+  color: var(--blue);
   font-size: 2.5rem;
 }
 
@@ -654,7 +655,7 @@ footer .container {
 
 .reply i {
   font-size: 2rem;
-  color: var(--red);
+  color: var(--blue);
 }
 
 .public-reply {
@@ -709,7 +710,7 @@ footer .container {
 
 .reactions > div i {
   font-size: 3rem;
-  color: var(--red);
+  color: var(--blue);
 }
 
 .comment-box {
@@ -727,7 +728,7 @@ footer .container {
 }
 
 p span {
-  color: var(--red);
+  color: var(--blue);
 }
 
 .comment-box textarea {
@@ -836,7 +837,7 @@ p span {
 }
 
 p a {
-  color: var(--red);
+  color: var(--blue);
 }
 
 .grid {
@@ -869,7 +870,7 @@ p a {
   padding: 0.5rem 1rem;
 }
 .promotion {
-  background: linear-gradient(-45deg, var(--red), #8589ff);
+  background: linear-gradient(-45deg, var(--blue), #8589ff);
   padding: 1rem;
   position: fixed;
   top: 0;
@@ -998,7 +999,7 @@ main {
     position: fixed;
     flex-direction: column;
     height: 90vh;
-    background: var(--red);
+    background: var(--blue);
     width: 100%;
     justify-content: space-around;
     align-items: center;
@@ -1055,7 +1056,7 @@ main {
 }
 .timeline button i,
 .likes button i {
-  color: var(--red);
+  color: var(--blue);
   font-size: 2.5rem;
 }
 .likes button i {
