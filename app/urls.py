@@ -1,3 +1,9 @@
+"""
+URL configuration for the app.
+
+This module defines the URL patterns for the app, mapping each URL to a specific view.
+"""
+
 from django.urls import path
 from . import views
 
