@@ -677,10 +677,10 @@ def get_transactions(request):
 @login_required
 def view_statistic(request):
     """
-    Display a summary of financial statistics for the current user over the past 30 days.
+    Display a summary of financial statistics for the current user.
 
     This view calculates and aggregates data on income, expenses, spending per category,
-    and daily expenses for the last 30 days. The results are then passed to the context
+    and daily expenses. The results are then passed to the context
     for rendering on the statistics page.
     """
 
