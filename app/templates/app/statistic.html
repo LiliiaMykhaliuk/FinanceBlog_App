@@ -16,22 +16,32 @@
         <!-- Flex container for blocks -->
         <div class="flex justify-center space-x-4">
             <!-- Block 1 -->
-            <div class="w-1/4 h-40 p-4 bg-white shadow-lg rounded-lg hover:bg-gray-200 transition-colors">
-                <h1>Expenses - last months</h1>
-                {{last_month_expenses.amount_in_usd__sum}}
+            <div class="w-1/4 h-40 p-4 bg-blue-900 shadow-lg rounded-lg hover:bg-blue-850 transition-colors border border-blue-900">
+                <h1 class="text-xl font-bold text-gray-300 border-b border-gray-300 pb-2">Expenses | Last month</h1>
+                <div class="flex-grow flex items-center justify-center mt-4">
+                    <span class="text-3xl font-bold text-gray-300">€{{last_month_expenses.amount_in_usd__sum|intcomma}} €</span>
+                </div>
             </div>
             <!-- Block 2 -->
-            <div class="w-1/4 h-40 p-4 bg-white shadow-lg rounded-lg hover:bg-gray-200 transition-colors">
-                <h1>Income - last month</h1>
-                {{last_month_income.amount_in_usd__sum}}
+            <div class="w-1/4 h-40 p-4 bg-blue-900 shadow-lg rounded-lg hover:bg-gray-200 transition-colors border border-blue-900">
+                <h1 class="text-xl font-bold text-gray-300 border-b border-gray-300 pb-2">Income | Last month</h1>
+                <div class="flex-grow flex items-center justify-center mt-4">
+                    <span class="text-3xl font-bold text-gray-300">€{{last_month_income.amount_in_usd__sum|intcomma}} €</span>
+                </div>
             </div>
             <!-- Block 3 -->
-            <div class="w-1/4 h-40 p-4 bg-white shadow-lg rounded-lg hover:bg-gray-200 transition-colors">
-                Block 3
+            <div class="w-1/4 h-40 p-4 bg-blue-900 shadow-lg rounded-lg hover:bg-gray-200 transition-colors border border-blue-900">
+                <h1 class="text-xl font-bold text-gray-300 border-b border-gray-300 pb-2">Total savings</h1>
+                <div class="flex-grow flex items-center justify-center mt-4">
+                    <span class="text-3xl font-bold text-gray-300">€{{last_month_expenses.amount_in_usd__sum|intcomma}} €</span>
+                </div>
             </div>
             <!-- Block 4 -->
-            <div class="w-1/4 h-40 p-4 bg-white shadow-lg rounded-lg hover:bg-gray-200 transition-colors">
-                Block 4
+            <div class="w-1/4 h-40 p-4 bg-blue-900 shadow-lg rounded-lg hover:bg-gray-200 transition-colors">
+                <h1 class="text-xl font-bold text-gray-300 border-b border-gray-300 pb-2">Comparison with last month</h1>
+                <div class="flex-grow flex items-center justify-center mt-4">
+                    <span class="text-3xl font-bold text-gray-300">{{last_month_expenses.amount_in_usd__sum|intcomma}} €</span>
+                </div>
             </div>
         </div>
     </div>

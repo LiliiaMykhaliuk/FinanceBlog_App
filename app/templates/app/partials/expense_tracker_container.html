@@ -9,41 +9,40 @@
 
     <!-- New text with links and pipe between them -->
     <!-- New text with links and pipe between them -->
-    <div class="col-span-4 mb-6 flex items-center justify-start space-x-4">
+    <div class="col-span-4 mb-6 flex items-center justify-between space-x-4">
+        <!-- Title in the remaining space -->
+        <div class="flex-grow text-center">
+            <h2 class="text-3xl font-bold text-gray-700 border-b border-gray-300 pb-2">Overview of Your Transactions</h2>
+        </div>
+        
         <!-- Single phrase with links in it -->
-        <a hx-get="{% url "create-transaction" %}"
-           hx-push-url="true"
-           hx-target="#transaction-block"
-           class="text-green-500 hover:underline cursor-pointer">
+        <button hx-get="{% url "create-transaction" %}"
+            hx-push-url="true"
+            hx-target="#transaction-block"
+            class="w-1/4 bg-blue-900 text-white py-3 px-8 rounded-lg font-bold text-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-green-300">
             Add new transactions
-        </a>
+        </button>
     </div>
-
     <!-- 3/4 cols for the table of transactions, now taking more width -->
     <div class="col-span-3">
-        <h2 class="mt-4 mb-4 prose prose-2xl text-3xl font-bold text-center mb-8">Statistic on your money</h2>
-        <div class="overflow-x-auto">
-            <table class="w-full table-auto border-collapse text-lg">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="p-4 text-left border-b border-gray-300">Total Income | Filtered</th>
-                        <th class="p-4 text-left border-b border-gray-300">Total Expenses | Filtered</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Example row - replace this with dynamic data -->
-                    <tr>
-                        <td class="p-4 border-b border-gray-300">${{ total_income_filtered|floatformat:2|intcomma }}</td>
-                        <td class="p-4 border-b border-gray-300">${{ total_expenses_filtered|floatformat:2|intcomma }}</td>
-                    </tr>
-                    <!-- Add more rows as necessary -->
-                </tbody>
-            </table>
+        <div class="flex space-x-4">
+            <!-- Block for Total Income -->
+            <div class="w-1/2 p-4 bg-white shadow-lg rounded-lg flex flex-col items-center justify-center">
+                <h2 class="text-xl font-bold text-blue-900 mb-2 border-b border-gray-300 pb-2">All Income</h2>
+                <p class="text-lg">{{ total_income_filtered|floatformat:2|intcomma }} €</p>
+            </div>
+            
+            <!-- Block for Total Expenses -->
+            <div class="w-1/2 p-4 bg-white shadow-lg rounded-lg flex flex-col items-center justify-center">
+                <h2 class="text-xl font-bold text-blue-900 mb-2 border-b border-gray-300 pb-2">All Expenses</h2>
+                <p class="text-lg">{{ total_expenses_filtered|floatformat:2|intcomma }} €</p>
+            </div>
         </div>
+        
 
         {% if transactions %}
         <!-- Expenses Table -->
-        <h2 class="mt-4 mb-4 prose prose-2xl text-3xl font-bold text-center mb-8">Expense List</h2>
+        <h2 class="mt-12 mb-4 prose prose-2xl text-2xl font-bold text-center mb-8">Transactions</h2>
         <div class="overflow-x-auto">
             <table class="w-full table-auto border-collapse text-lg">
                 <thead class="bg-gray-100">
@@ -76,7 +75,7 @@
                             <td class="p-4 border-b border-gray-300">{{transaction.date}}</td>
                             <td class="p-4 border-b border-gray-300">{{transaction.category}}</td>
                             <td class="p-4 border-b border-gray-300">{{transaction.type}}</td>
-                            <td class="p-4 border-b border-gray-300">{{transaction.amount_in_usd}}</td>
+                            <td class="p-4 border-b border-gray-300">{{transaction.amount_in_usd}} €</td>
                             
                             <!-- Edit Button -->
                             <td class="p-4 border-b border-gray-300 items-center">
@@ -108,7 +107,6 @@
                     <!-- Add more rows as necessary -->
                 </tbody>
             </table>
-            <span id="spinner" class="htmx-indicator"></span>
         </div>
         {% else %}
         <p class="text-center text-3xl text-gray-500 mt-8 mx-auto">No expenses added yet.</p>
@@ -124,17 +122,17 @@
             hx-swap="outerHTML" class="bg-white p-8 rounded-lg shadow-md">
             <div class="mb-4 form-control">
                 {{filter.form.transaction_type|add_label_class:"label text-xl text-black"}}
-                {% render_field filter.form.transaction_type class+="border-green-500 bg-gray-200 text-lg p-3" %}
+                {% render_field filter.form.transaction_type class+="border-green-500 bg-gray-200 text-lg p-3 w-full" %}
             </div>
 
             <div class="mb-4 form-control">
                 {{filter.form.start_date|add_label_class:"label text-xl text-black"}}
-                {% render_field filter.form.start_date class+="border-green-500 bg-gray-200 text-lg p-3" %}
+                {% render_field filter.form.start_date class+="border-green-500 bg-gray-200 text-lg p-3 w-full" %}
             </div>
 
             <div class="mb-4 form-control">
                 {{filter.form.end_date|add_label_class:"label text-xl text-black"}}
-                {% render_field filter.form.end_date class+="border-green-500 bg-gray-200 text-lg p-3" %}
+                {% render_field filter.form.end_date class+="border-green-500 bg-gray-200 text-lg p-3 w-full" %}
             </div>
 
             <div class="mb-4 form-control">
@@ -142,7 +140,7 @@
             </div>
 
             <div class="flex-none">
-                <button type="submit" class="bg-green-400 text-white w-full p-4 rounded-lg font-bold text-lg hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-green-300">
+                <button type="submit" class="bg-blue-900 text-white w-full p-4 rounded-lg font-bold text-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-green-300">
                     Filter
                 </button>
             </div>
