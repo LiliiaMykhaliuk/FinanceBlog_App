@@ -16,14 +16,14 @@
         <!-- Flex container for blocks -->
         <div class="flex justify-center space-x-4">
             <!-- Block 1 -->
-            <div class="w-1/4 h-40 p-4 bg-blue-900 shadow-lg rounded-lg hover:bg-blue-850 transition-colors border border-blue-900">
+            <div class="w-1/4 h-40 p-4 bg-blue-900 shadow-lg rounded-lg hover:bg-gray-800 transition-colors border border-blue-900">
                 <h1 class="text-xl font-bold text-gray-300 border-b border-gray-300 pb-2">Expenses | Last month</h1>
                 <div class="flex-grow flex items-center justify-center mt-4">
                     <span class="text-3xl font-bold text-gray-300">€{{last_month_expenses.amount_in_usd__sum|intcomma}} €</span>
                 </div>
             </div>
             <!-- Block 2 -->
-            <div class="w-1/4 h-40 p-4 bg-blue-900 shadow-lg rounded-lg hover:bg-gray-200 transition-colors border border-blue-900">
+            <div class="w-1/4 h-40 p-4 bg-blue-900 shadow-lg rounded-lg hover:bg-gray-800 transition-colors border border-blue-900">
                 <h1 class="text-xl font-bold text-gray-300 border-b border-gray-300 pb-2">Income | Last month</h1>
                 <div class="flex-grow flex items-center justify-center mt-4">
                     <span class="text-3xl font-bold text-gray-300">€{{last_month_income.amount_in_usd__sum|intcomma}} €</span>
@@ -48,80 +48,149 @@
 </div>
 
 
-<div class="flex">
-    <div class="w-1/2 shadow-lg m-10">
-        <h1 class="m-10">Expenses by category</h1>
-        <canvas id="myChart1" class="m-10"</canvas>
+<!-- Charts Section -->
+<div class="flex flex-wrap justify-around">
+    <div class="w-full lg:w-5/12 shadow-lg m-5 bg-white p-6 rounded-lg">
+        <h2 class="text-center text-xl font-semibold text-blue-900 mb-4">Expenses by Category</h2>
+        <canvas id="myChart1" class="w-full h-64"></canvas>
     </div>
-    <div class="w-1/2 shadow-lg m-10">
-        <h1 class="m-10">Daily expenses sum</h1>
-        <canvas id="myChart2" class="m-10"</canvas>
+    <div class="w-full lg:w-5/12 shadow-lg m-5 bg-white p-6 rounded-lg">
+        <h2 class="text-center text-xl font-semibold text-blue-900 mb-4">Daily Expenses Sum</h2>
+        <canvas id="myChart2" class="w-full h-64"></canvas>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
 
 <script>
-    // Chart for first canvas
-    var ctx1 = document.getElementById('myChart1').getContext('2d');
-    var myChart1 = new Chart(ctx1, {
-        type: 'pie',
-        data: {
-            labels: [{% for category in  category_names %} '{{category}}', {% endfor %}],
-            datasets: [{
-                data: [{% for category_sum in  category_sums %} '{{category_sum}}', {% endfor %}], // Example data for the first chart
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
+        // Chart for Expenses by Category with Percentage Display
+        var ctx1 = document.getElementById('myChart1').getContext('2d');
+        var myChart1 = new Chart(ctx1, {
+            type: 'doughnut',
+            data: {
+                labels: [{% for category in category_names %} '{{ category }}', {% endfor %}],
+                datasets: [{
+                    data: [{% for category_sum in category_sums %} {{ category_sum }}, {% endfor %}],
+                    backgroundColor: [
+                        'rgba(72, 61, 139, 0.8)', // Slate Blue
+                        'rgba(54, 110, 114, 0.8)', // Teal
+                        'rgba(233, 196, 106, 0.8)', // Soft Gold
+                        'rgba(244, 98, 93, 0.8)',   // Desaturated Coral
+                        'rgba(142, 142, 223, 0.8)', // Muted Lavender
+                        'rgba(139, 173, 115, 0.8)'  // Soft Olive
+                    ],
+                    borderColor: 'rgba(255, 255, 255, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: '#333',
+                            font: { size: 14 }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: '#333',
+                        borderWidth: 1
+                    },
+                    datalabels: {
+                        color: '#fff',
+                        font: {
+                            weight: 'bold',
+                            size: 14
+                        },
+                        formatter: (value, context) => {
+                            let total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                            let percentage = (value / total * 100).toFixed(1) + '%';
+                            return percentage;
+                        }
+                    }
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
                 }
-            }
-        }
-    });
+            },
+            plugins: [ChartDataLabels] // Register the datalabels plugin
+        });
+    
 
-    // Chart for second canvas
+    // Updated Chart for Daily Expenses Sum with Modern Colors
     var ctx2 = document.getElementById('myChart2').getContext('2d');
+    var gradient = ctx2.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(72, 61, 139, 0.5)');  // Slate Blue gradient
+    gradient.addColorStop(1, 'rgba(54, 110, 114, 0)');   // Teal gradient
+
     var myChart2 = new Chart(ctx2, {
         type: 'line',
         data: {
-            labels: [{% for date in  last_7_days_dates %} '{{date}}', {% endfor %}],
+            labels: [{% for date in last_7_days_dates %} '{{ date }}', {% endfor %}],
             datasets: [{
-                data: [{% for sum in  last_7_days_sums %} '{{sum}}', {% endfor %}], // Example data for the second chart
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
+                data: [{% for sum in last_7_days_sums %} {{ sum }}, {% endfor %}],
+                fill: true,
+                backgroundColor: gradient,
+                borderColor: 'rgba(72, 61, 139, 1)', // Slate Blue
+                borderWidth: 3,
+                tension: 0.4,  // Smooth lines
+                pointBackgroundColor: 'rgba(233, 196, 106, 1)', // Soft Gold
+                pointBorderColor: 'rgba(255, 255, 255, 1)',
+                pointRadius: 5,
+                pointHoverRadius: 8,
+                pointHoverBorderWidth: 2
             }]
         },
         options: {
             scales: {
+                x: {
+                    ticks: {
+                        color: '#333',
+                        font: { size: 12 }
+                    },
+                    grid: {
+                        display: false
+                    }
+                },
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    ticks: {
+                        color: '#333',
+                        font: { size: 12 }
+                    },
+                    grid: {
+                        color: 'rgba(200, 200, 200, 0.2)'
+                    }
                 }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    borderColor: '#333',
+                    borderWidth: 1
+                }
+            },
+            animation: {
+                duration: 2000,
+                easing: 'easeOutQuart'
             }
         }
     });
 </script>
+
+
 
 
 

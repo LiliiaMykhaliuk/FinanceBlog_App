@@ -3,61 +3,63 @@
 
 {% csrf_token %}
 <div class="flex justify-center">
-    
     <form hx-post="{% url 'create-transaction' %}" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' 
-        class="bg-white shadow-lg p-8 rounded-lg w-4/6">
-
-        <h2 class="mt-4 mb-4 prose prose-2xl text-3xl text-black font-bold text-center mb-8">Add new transaction</h2>
-        <!-- Type Field -->
-        <div class="mb-4 form-control text-black">
-            {{ form.type|add_label_class:"label text-black block mb-1 text-lg font-bold" }}
-            {% render_field form.type class="input w-full bg-gray-100 border-black text-black p-3 rounded" %}
+          class="bg-gray-100 shadow-xl rounded-lg w-4/6">
+        
+        <div class="bg-blue-900 text-center p-4 rounded-t-lg">
+            <h2 class="text-3xl font-bold text-white">Add New Transaction</h2>
         </div>
 
-        <!-- Amount Field -->
-        <div class="mb-4 form-control">
-            {{ form.amount|add_label_class:"label text-black block mb-1 text-lg font-bold" }}
-            {% render_field form.amount class="input w-full bg-gray-100 border-black text-black p-3 rounded" %}
-            
-            <!-- Display errors for the amount field -->
-            {% for error in  form.amount.errors%}
-            <p class="text-red-500 text-xs italic">{{ error }}</p>
-            {% endfor %}
-        </div>
+        <div class="p-8 space-y-6">
 
-        <!-- Currency Field -->
-        <div class="mb-4 form-control">
-            {{ form.currency|add_label_class:"label text-black block mb-1 text-lg font-bold" }}
-            {% render_field form.currency class="input w-full bg-gray-100 border-black text-black p-3 rounded" %}
-        </div>
+            <!-- Type Field -->
+            <div class="form-control text-black">
+                {{ form.type|add_label_class:"label text-blue-900 block mb-1 text-lg font-semibold" }}
+                {% render_field form.type class="input w-full bg-gray-50 border border-gray-300 shadow-sm p-3 rounded hover:border-blue-500 focus:ring-2 focus:ring-blue-300" %}
+            </div>
 
-        <!-- Date Field -->
-        <div class="mb-4 form-control">
-            {{ form.date|add_label_class:"label text-black block mb-1 text-lg font-bold" }}
-            {% render_field form.date class="input w-full bg-gray-100 border-black text-black p-3 rounded" %}
-        </div>
+            <!-- Amount Field -->
+            <div class="form-control">
+                {{ form.amount|add_label_class:"label text-blue-900 block mb-1 text-lg font-semibold" }}
+                {% render_field form.amount class="input w-full bg-gray-50 border border-gray-300 shadow-sm p-3 rounded hover:border-blue-500 focus:ring-2 focus:ring-blue-300" %}
+                {% for error in form.amount.errors %}
+                <p class="text-red-500 text-xs italic">{{ error }}</p>
+                {% endfor %}
+            </div>
 
-        <!-- Category Field -->
-        <div class="mb-4 form-control">
-            {{ form.category|add_label_class:"label text-black block mb-1 text-lg font-bold" }}
-            {% render_field form.category class="text-green-500 border-gray-300 rounded focus:ring-green-500" %}
-        </div>
+            <!-- Currency, Date, Category Fields -->
+            <div class="grid grid-cols-2 gap-4">
+                <div class="form-control">
+                    {{ form.currency|add_label_class:"label text-blue-900 block mb-1 text-lg font-semibold" }}
+                    {% render_field form.currency class="input w-full bg-gray-50 border border-gray-300 shadow-sm p-3 rounded hover:border-blue-500 focus:ring-2 focus:ring-blue-300" %}
+                </div>
+                <div class="form-control">
+                    {{ form.date|add_label_class:"label text-blue-900 block mb-1 text-lg font-semibold" }}
+                    {% render_field form.date class="input w-full bg-gray-50 border border-gray-300 shadow-sm p-3 rounded hover:border-blue-500 focus:ring-2 focus:ring-blue-300" %}
+                </div>
+            </div>
 
-        <!-- Submit Button -->
-        <div class="flex justify-center">
-            <button class="bg-green-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300">
-                Add
-            </button>
-            <button 
-                hx-get="{% url 'expense_tracker' %}" 
-                hx-target="#transaction-block"
-                hx-push-url='/expense_tracker'
-                class="bg-yellow-500 text-white font-bold py-3 px-8 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-green-300"
-            >
-                Cancel
-            </button>
+            <!-- Category Fields -->
+            <div class="form-control">
+                {{ form.category|add_label_class:"label text-blue-900 block mb-1 text-lg font-semibold" }}
+                {% render_field form.category class="input bg-gray-50 border border-gray-300 shadow-sm p-3 rounded hover:border-blue-500 focus:ring-2 focus:ring-blue-300" %}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="space-x-4 mb-8">
+                <button class="w-1/4 bg-blue-900 text-white py-3 px-8 rounded-lg font-bold text-lg hover:bg-blue-700 shadow-md focus:ring focus:ring-blue-400">
+                    Add Transaction
+                </button>
+                <button hx-get="{% url 'expense_tracker' %}" 
+                        hx-target="#transaction-block"
+                        hx-push-url='/expense_tracker'
+                        class="w-1/4 bg-gray-700 text-white py-3 px-8 rounded-lg font-bold text-lg hover:bg-gray-600 shadow-md focus:ring focus:ring-gray-400">
+                    Cancel
+                </button>
+            </div>
         </div>
     </form>
 </div>
+
 
 
