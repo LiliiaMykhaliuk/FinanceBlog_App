@@ -8,7 +8,19 @@ This project is a finance management platform that integrates a financial blog a
 
 Built with modern technologies like Django, Python, and AWS, the platform provides great experience for users to manage their finances and access valuable resources.
 
+---
 
+## Demo - Finance Blog Part
+
+[Demo Finance Blog](https://github.com/user-attachments/assets/4d621e07-d463-4b2f-89b3-fbe3a85b40df)
+
+
+## Demo - Expense Tracker Part
+
+[Demo Tracker Part](https://github.com/user-attachments/assets/6ee308f6-243b-4334-8668-fedc97136be4)
+
+
+---
 
 ## Features
 
@@ -67,27 +79,13 @@ Built with modern technologies like Django, Python, and AWS, the platform provid
 ---
 
 
-## Demo - Finance Blog Part
 
-[Demo Finance Blog](https://github.com/user-attachments/assets/4d621e07-d463-4b2f-89b3-fbe3a85b40df)
+## Future Features
 
-
-## Demo - Expense Tracker Part
-
-[Demo Tracker Part](https://github.com/user-attachments/assets/6ee308f6-243b-4334-8668-fedc97136be4)
-
-
----
-
-
-## Backlog
-
-- **Content Creation & Sharing:** Share financial tips, articles, and advice with others. A simple editor allows for easy post creation, helping you spread useful financial knowledge.
+- **Content Creation & Sharing:** Share financial tips, articles, and advice with others. A simple editor allows for easy post creation, helping you spread your useful financial knowledge.
 - **Data Export:** Easily export transaction data for further analysis or tax purposes, supporting CSV and PDF formats.
 
 - **Budgeting and Goal Setting:** Set financial goals and create budgets to help users stay on track with their financial plans. The platform provides insights into spending patterns and suggests areas for improvement to help users achieve their goals.
 
 ---
-
-## Installation:
 
