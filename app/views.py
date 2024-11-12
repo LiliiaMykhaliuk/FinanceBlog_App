@@ -103,6 +103,12 @@ def post_page(request, slug):
         post.view_count = post.view_count + 1
     post.save()
 
+    # Retrieve top posts based on view count (ordered in descending order)
+    top_posts = Post.objects.all().order_by('-view_count')[:3]
+
+    # Retrieve recent posts ordered by last updated
+    recent_posts = Post.objects.all().order_by('-last_updated')[:3]
+
     # Context data for rendering the post page
     context = {
         'post':post,
@@ -110,7 +116,9 @@ def post_page(request, slug):
         'comments':comments,
         'is_bookmarked':is_bookmarked, 
         'post_is_liked': post_is_liked,
-        'number_of_likes': number_of_likes
+        'number_of_likes': number_of_likes,
+        'top_posts': top_posts,
+        'recent_posts': recent_posts,
     }
     return render(request, 'app/post.html', context)
 
