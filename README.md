@@ -69,12 +69,12 @@ Built with modern technologies like Django, Python, and AWS, the platform provid
 
 ## Demo - Finance Blog Part
 
-![Demo Finance Blog](https://github.com/user-attachments/assets/4d621e07-d463-4b2f-89b3-fbe3a85b40df)
+[Demo Finance Blog](https://github.com/user-attachments/assets/4d621e07-d463-4b2f-89b3-fbe3a85b40df)
 
 
 ## Demo - Expense Tracker Part
 
-![Demo Finance Blog](https://github.com/user-attachments/assets/6ee308f6-243b-4334-8668-fedc97136be4)
+[Demo Tracker Part](https://github.com/user-attachments/assets/6ee308f6-243b-4334-8668-fedc97136be4)
 
 
 ---
