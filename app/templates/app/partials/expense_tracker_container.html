@@ -3,19 +3,17 @@
 {% load partials %}
 {% csrf_token %}
 
-<!-- Define Grid container div -->
+<!-- Grid container div -->
 <div class="grid grid-cols-4 gap-6"
     id="statistic-container">
 
-    <!-- New text with links and pipe between them -->
-    <!-- New text with links and pipe between them -->
     <div class="col-span-4 mb-6 flex items-center justify-between space-x-4">
-        <!-- Title in the remaining space -->
+        <!-- Title in the remaining space near the link -->
         <div class="flex-grow text-center">
             <h2 class="text-3xl font-bold text-gray-700 border-b border-gray-300 pb-2">Overview of Your Transactions</h2>
         </div>
         
-        <!-- Single phrase with links in it -->
+        <!-- Phrase with links to adding transaction form -->
         <button hx-get="{% url "create-transaction" %}"
             hx-push-url="true"
             hx-target="#transaction-block"
@@ -23,7 +21,7 @@
             Add new transactions
         </button>
     </div>
-    <!-- 3/4 cols for the table of transactions, now taking more width -->
+    <!-- 3/4 cols for the table of transactions -->
     <div class="col-span-3">
         <div class="flex space-x-4">
             <!-- Block for Total Income -->
@@ -56,7 +54,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Example row - replace this with dynamic data -->
+                    <!-- Dynamic data for table -->
 
                     <!-- Infinite scrolling -->
                     {% partialdef transaction_list inline=True %}
@@ -115,7 +113,7 @@
 
     </div>
 
-    <!-- 1/4 cols for the filter form, sticky to the right side -->
+    <!-- 1/4 cols for the filter form (sticks to the right side) -->
     <div class="col-span-1 sticky top-0 ml-6">
         <form hx-get="{% url 'expense_tracker' %}"
             hx-target="#statistic-container"

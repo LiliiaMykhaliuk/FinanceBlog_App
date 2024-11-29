@@ -1,12 +1,17 @@
 """
 Django views for handling the post page, index page, and related user interactions.
 
+Finance Blog:
 This module includes views that render the post page, allow users to comment on posts, 
 like or bookmark posts, and manage subscription. It also includes the logic for rendering 
 the homepage, displaying top posts, recent posts, and featured posts.
 
-The views utilize models like Post, Comments, and WebSiteMeta, and provide forms for user 
-interaction such as subscribing and commenting.
+Expence tracker:
+This module includes views that render expence tracker pages, allow users to view, filter, delete and add transactions.
+The section with statistic allows user to view different statistics about their transactions.
+
+The views utilize models like Comments, Post, Tag, Profile, WebSiteMeta, Transaction, Category,
+and provide forms for user interaction.
 """
 
 
@@ -289,7 +294,7 @@ def search_posts(request):
     posts = Post.objects.filter(title__icontains=search_query) | Post.objects.filter(content__icontains=search_query)
 
     # !!!!!!!!!!!!!!! ----REMOVE in production
-    print('Search:',search_query)
+    # print('Search:',search_query)
 
     # Context data for rendering the search results page
     context = {'posts':posts, 'search_query':search_query}
@@ -315,7 +320,7 @@ def about(request):
     if WebSiteMeta.objects.all().exists():
         website_info = WebSiteMeta.objects.all()[0]
 
-    # Context data for rendering the search results page
+
     context = {'website_info':website_info}
     return render(request, 'app/about.html', context)
 
@@ -344,7 +349,7 @@ def register_user(request):
             login(request, user)
             return redirect("/")
 
-    # Context data for rendering the search results page
+
     context = {'form': form}
     return render(request, 'registration/registration.html', context)
 
@@ -367,7 +372,6 @@ def bookmark_post(request, slug):
     else:
         post.bookmarks.add(request.user) # Add bookmark if it doesn't exist
 
-    # Context data for rendering the search results page
     return HttpResponseRedirect(reverse('post_page', args=[str(slug)]))
 
 
@@ -405,7 +409,7 @@ def all_bookmarked_posts(request):
 
     bookmarked_posts = Post.objects.filter(bookmarks=request.user)
 
-    # Context data for rendering the search results page
+    # Context data for rendering all bookmarked posts page
     context = {'bookmarked_posts': bookmarked_posts}
     return render(request, 'app/all_bookmarked_posts.html', context)
 
@@ -423,7 +427,7 @@ def my_posts(request):
 
     all_user_posts = Post.objects.filter(author=request.user)
 
-    # Context data for rendering the search results page
+    # Context data for rendering my posts page
     context = {'all_user_posts': all_user_posts}
     return render(request, 'app/my_posts.html', context)
 
@@ -441,7 +445,7 @@ def all_posts(request):
 
     all_posts = Post.objects.all()
 
-    # Context data for rendering the search results page
+    # Context data for rendering the all posts page
     context = {'all_posts': all_posts}
 
     return render(request, 'app/all_posts.html', context)
@@ -462,7 +466,7 @@ def transactions_list(request):
     total_income = transaction_filter.qs.get_total_income()
     total_expenses = transaction_filter.qs.get_total_expenses()
 
-    # Context data for rendering the search results page
+    # Context data for rendering transactions list page
     context = {
         'filter': transaction_filter,
         'total_income': total_income,
@@ -501,7 +505,7 @@ def expense_tracker(request):
     total_income_filtered = transaction_filter.qs.get_total_income()
     total_expenses_filtered = transaction_filter.qs.get_total_expenses()
 
-    # Context data for rendering the search results page
+    # Context data for rendering expense tracker page or partial page for HTMX requests
     context = {
         'filter': transaction_filter,
         'total_income_filtered': total_income_filtered,

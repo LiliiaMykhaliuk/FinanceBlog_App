@@ -62,6 +62,8 @@
           {% endif %}
 
         </div>
+
+        <!-- menu: Right side of the main menu-->
         <div class="action-btn">
           {% if user.is_authenticated %}
           <a href="{% url "logout" %}"
@@ -83,6 +85,8 @@
     {% block content %}
     {% endblock content %}
     </main>
+
+    <!-- Footer-->
     <footer>
       <div class="container">
         <div class="grid-4">
