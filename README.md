@@ -26,18 +26,17 @@ Built with modern technologies like Django, Python, and AWS, the platform provid
 
 
 ### 1. **Personal Finance Blog:** 
-- **Financial Guidance & Insights:** A comprehensive blogging platform for sharing financial insights, tips, and articles to help users manage their finances effectively.
+- **Financial Guidance & Insights:** A blogging platform for sharing financial insights, tips, and articles to help users manage their finances effectively.
 
 ### 2. **Expense Tracking & Management**
 - **Real-Time Transaction Tracking:** Automatically record income and expense transactions, categorize them, and display real-time financial data.
-- **Expense Breakdown by Category:** Visualize your spending across categories such as groceries, entertainment, and utilities, helping you identify areas for improvement.
+- **Expense Breakdown by Category:** Visualize your spending across categories such as groceries, entertainment, etc, helping you identify areas for improvement.
 - **Multiple Currency Support:** Users can submit transactions in different currencies, and the system automatically converts amounts to a base currency.
-- **Advanced Search & Filters:** Quickly filter and search for transactions based on date ranges, categories, and amounts, making it easier to track specific financial activity.
+- **Search & Filters:** Quickly filter and search for transactions based on date ranges, type of transactions, and categories, making it easier to track specific financial activity.
 
 ### 3. **Analytics & Financial Insights**
 - **Interactive Dashboards:** Visualize your financial data using charts and graphs that highlight key spending trends and income growth.
-- **Customizable Reports:** Generate detailed financial reports to track your financial progress over time, assess budgets, and identify potential savings opportunities.
-- **Trend Analysis:** View insights on your financial habits and get recommendations for better financial planning and budgeting.
+- **Trend Analysis:** View insights on your financial habits and gain insights for better financial planning and budgeting.
 
 ---
 
