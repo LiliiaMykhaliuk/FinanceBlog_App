@@ -12,6 +12,8 @@ from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 
+from .utils import convert_to_EUR
+
 # Local import
 from .managers import TransactionQuerySet
 
@@ -190,6 +192,18 @@ class Transaction(models.Model):
         """
 
         return f"{self.type} of {self.amount_in_usd} {self.currency} on {self.date} by {self.user}"
+
+
+    def save(self, *args, recalculate=False, **kwargs):
+        """
+         Override the save method to convert the amount to EUR before saving the transaction.
+        """
+
+        # Convert transaction amount to EUR and save it to `amount_in_usd` field
+        self.amount_in_usd = convert_to_EUR(self.amount, self.currency)
+
+        super().save(*args, **kwargs)
+
 
     class Meta:
         """

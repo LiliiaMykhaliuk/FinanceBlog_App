@@ -547,9 +547,7 @@ def create_transaction(request):
             transaction = form.save(commit=False)
             transaction.user = request.user # Associate transaction with the current user
 
-            # Convert transaction amount to EUR and save it to `amount_in_usd` field
-            transaction.amount_in_usd = convert_to_EUR(transaction.amount, transaction.currency)
-            transaction.save()  # Save the transaction to the database
+            transaction.save(recalculate=True)  # Save the transaction to the database
 
             # Render a success message on successful transaction creation
             context = {'message': "Transaction was added successfully!"}
@@ -583,7 +581,7 @@ def update_transaction(request, pk):
     if api_data:
         currencies = [(code, code) for code in api_data.keys()] # Default to empty list if API fails
     else:
-        print('API IS DOWN')
+        # print('API IS DOWN')
         currencies = []
 
     # Retrieve the transaction to be updated, ensuring it belongs to the current user
@@ -600,9 +598,9 @@ def update_transaction(request, pk):
 
             # Recalculate `amount_in_usd` if either 'amount' or 'currency' has changed
             if form.has_changed() and ('amount' in form.changed_data or 'currency' in form.changed_data):
-                transaction.amount_in_usd = convert_to_EUR(transaction.amount, transaction.currency)
-
-            transaction.save()  # Save the updated transaction to the database
+                transaction.save(recalculate=True)
+            else:
+                transaction.save()
 
             # Render a success message if update was successful
             context = {'message': "Transaction was updated successfully!"}

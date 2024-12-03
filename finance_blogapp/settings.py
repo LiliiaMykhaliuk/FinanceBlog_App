@@ -166,3 +166,29 @@ PAGE_SIZE = 5
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Directory to store logs
+
+LOG_DIR = "/var/log"
+
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'level': 'ERROR',
+        'class': 'logging.FileHandler',
+        'filename': os.path.join(LOG_DIR, 'finance_bloggapp.log'),
+
+
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
