@@ -178,11 +178,11 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'level': 'ERROR',
-        'class': 'logging.FileHandler',
-        'filename': os.path.join(LOG_DIR, 'finance_bloggapp.log'),
-
-
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'finance_bloggapp.log'),
+        }
     },
     'loggers': {
         'django': {
